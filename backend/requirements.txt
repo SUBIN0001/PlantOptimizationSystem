@@ -5,4 +5,11 @@ numpy==1.26.4
 scikit-learn==1.5.1
 openpyxl==3.1.5
 python-multipart==0.0.9
-mangum 
+mangum==0.21.0
+
+scipy==1.13.1
+
+xlsxwriter==3.2.0
+
+pydantic==2.12.5
+python-dotenv==1.2.2
