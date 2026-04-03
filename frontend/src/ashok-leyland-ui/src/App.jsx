@@ -286,7 +286,7 @@ function DataInput({ onNext, savedPreview, onPreviewChange }) {
     const fd = new FormData();
     fd.append("file", file);
     try {
-      const r = await fetch(`${API}/upload`, { method: "POST", body: fd });
+      const r = await fetch(`${API}/api/upload`, { method: "POST", body: fd });
       const d = await r.json();
       if (d.error) { setError(d.error); return; }
       setPreview(d);
@@ -913,7 +913,7 @@ function Optimization({
           })
           : locations;
 
-      const r = await fetch(`${API}/analyze`, {
+      const r = await fetch(`${API}/api/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1114,7 +1114,7 @@ function Simulation({ locations, weights, constraints, regionFilter = { regionFi
     }
     setLoading(true); setError(null);
     try {
-      const r = await fetch(`${API}/monte-carlo`, {
+      const r = await fetch(`${API}/api/monte-carlo`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1309,7 +1309,7 @@ function Export({ analysisResults, weights, locations, constraints, pairwiseMatr
     }
     setExporting(true); setExportError(null);
     try {
-      const response = await fetch(`${API}/export-excel`, {
+      const response = await fetch(`${API}/api/export-excel`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

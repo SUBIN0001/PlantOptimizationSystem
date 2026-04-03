@@ -1,14 +1,8 @@
-"""
-Ashok Leyland Plant Location Decision System - Backend API
-Supports: AHP + Entropy + TOPSIS + Monte Carlo Simulation
-"""
-
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
-from mangum import Mangum          # ✅ was missing
 import pandas as pd
 import numpy as np
 from io import BytesIO, StringIO
@@ -20,11 +14,10 @@ import uvicorn
 
 app = FastAPI(title="Ashok Leyland Plant Location Decision API", version="2.0")
 
-# ✅ Only ONE CORSMiddleware — removed the duplicate
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://plantoptimizationsystem.vercel.app",  # no trailing slash
+        "https://plantoptimizationsystem.vercel.app",
         "http://localhost:5173",
     ],
     allow_credentials=True,
@@ -32,8 +25,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ Mangum handler after app + middleware setup
-handler = Mangum(app)
+# ✅ Safe import — works both locally and on Vercel
+try:
+    from mangum import Mangum
+    handler = Mangum(app)
+except ImportError:
+    handler = None  # Local dev — Mangum not needed
 # ═════════════════════════════════════════════════════════════════════════════
 # DATA MODELS
 # ═════════════════════════════════════════════════════════════════════════════
