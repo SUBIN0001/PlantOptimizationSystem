@@ -5,7 +5,7 @@ import logo from "./assets/ashok-leyland-logo.jpg";
 // CONSTANTS
 // ─────────────────────────────────────────────────────────────────────────────
 
-const API = "http://localhost:8000/api";
+const API = "https://plant-optimization-system-qj11.vercel.app" || "http://localhost:8000/api";
 
 const STEPS = [
   { id: "data", label: "Data Input", sub: "Load Excel / CSV", icon: "⬆" },

@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
+from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import numpy as np
 from io import BytesIO, StringIO
@@ -19,8 +20,18 @@ import xlsxwriter
 import uvicorn
 
 app = FastAPI(title="Ashok Leyland Plant Location Decision API", version="2.0")
-
+handler = Mangum(app)
 # CORS for React frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://plantoptimizationsystem.vercel.app/",  # your frontend domain
+        "http://localhost:5173",              # local dev
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -1077,7 +1088,9 @@ def create_excel_report(data: Dict, output_buffer: BytesIO):
 # ═════════════════════════════════════════════════════════════════════════════
 # API ENDPOINTS
 # ═════════════════════════════════════════════════════════════════════════════
-
+@app.get("/")
+def root():
+    return {"status": "ok"}
 @app.post("/api/upload")
 async def upload_file(file: UploadFile = File(...)):
     """Upload and process Excel/CSV file — auto-detects header row and format."""
