@@ -1,7 +1,6 @@
 """
 Ashok Leyland Plant Location Decision System - Backend API
 Supports: AHP + Entropy + TOPSIS + Monte Carlo Simulation
-Processes: finaleyy.xlsx format AND simplified pre-scored format
 """
 
 from fastapi import FastAPI, File, UploadFile, HTTPException
@@ -9,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
-from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum          # ✅ was missing
 import pandas as pd
 import numpy as np
 from io import BytesIO, StringIO
@@ -20,26 +19,21 @@ import xlsxwriter
 import uvicorn
 
 app = FastAPI(title="Ashok Leyland Plant Location Decision API", version="2.0")
-handler = Mangum(app)
-# CORS for React frontend
+
+# ✅ Only ONE CORSMiddleware — removed the duplicate
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://plantoptimizationsystem.vercel.app",  # your frontend domain
-        "http://localhost:5173",              # local dev
+        "https://plantoptimizationsystem.vercel.app",  # no trailing slash
+        "http://localhost:5173",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
+# ✅ Mangum handler after app + middleware setup
+handler = Mangum(app)
 # ═════════════════════════════════════════════════════════════════════════════
 # DATA MODELS
 # ═════════════════════════════════════════════════════════════════════════════
